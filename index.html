@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#25408F" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10131B" media="(prefers-color-scheme: dark)">
+<meta name="description" content="Japanese from zero: kana, menus, travel phrases and a path to fluency.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Nihongo">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;-webkit-tap-highlight-color:transparent}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Nihongo Path</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* Layout: one narrow study column under a sticky segmented tab bar; indigo ink on cool washi, persimmon only for "in progress" marks */
+:root{
+  --bg:#F4F5F8; --surface:#FFFFFF; --ink:#1A1E2A; --muted:#5B6377; --line:#DCE0E9;
+  --ai:#25408F; --ai-soft:#E4E9F7; --kaki:#D9622B; --kaki-soft:#FBE9DF;
+  --good:#2E7A58; --good-soft:#E1F1E8; --bad:#B23A30; --bad-soft:#F7E3E1;
+  --f-jp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+  --f-ui:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10131B; --surface:#181C27; --ink:#E7E9F0; --muted:#9AA2B6; --line:#2A3042;
+  --ai:#93A9F2; --ai-soft:#1F2840; --kaki:#F08A55; --kaki-soft:#3A2419;
+  --good:#5FBF90; --good-soft:#16302A; --bad:#EA6E62; --bad-soft:#3A1C1A; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#10131B; --surface:#181C27; --ink:#E7E9F0; --muted:#9AA2B6; --line:#2A3042;
+  --ai:#93A9F2; --ai-soft:#1F2840; --kaki:#F08A55; --kaki-soft:#3A2419;
+  --good:#5FBF90; --good-soft:#16302A; --bad:#EA6E62; --bad-soft:#3A1C1A; color-scheme:dark;}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.55}
+button{font:inherit;color:inherit}
+a{color:var(--ai)}
+:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
+.wrap{max-width:720px;margin:0 auto;padding-inline:16px;padding-block:20px 48px}
+
+header.top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+header.top h1{margin:0;font-family:var(--f-jp);font-size:1.7rem;font-weight:700;letter-spacing:.01em;text-wrap:balance}
+header.top h1 span{color:var(--ai);font-size:1rem;margin-left:.5rem;font-weight:500}
+header.top p{margin:0;color:var(--muted);font-size:.85rem}
+
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px;margin-bottom:18px}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
+.seg button{border:0;background:transparent;border-radius:9px;padding:8px 4px;cursor:pointer;font-weight:500;color:var(--muted);display:flex;flex-direction:column;align-items:center;line-height:1.2}
+.seg button small{font-family:var(--f-jp);font-size:.8rem;opacity:.8}
+.seg button[aria-selected="true"]{background:var(--ai);color:var(--bg)}
+
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.between{justify-content:space-between}
+.pill{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;cursor:pointer;font-size:.9rem}
+.pill[aria-pressed="true"]{background:var(--ai-soft);border-color:var(--ai);color:var(--ai);font-weight:700}
+.label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h2{font-family:var(--f-jp);font-size:1.25rem;margin:28px 0 4px;text-wrap:balance}
+.note{color:var(--muted);font-size:.88rem;margin:0 0 12px;max-width:62ch}
+
+.progress{margin:16px 0 4px}
+.bar{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--good);border-radius:6px;transition:width .4s}
+.num{font-variant-numeric:tabular-nums}
+
+/* kana chart */
+.chart{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.cell{aspect-ratio:1/1.05;border:1px solid var(--line);background:var(--surface);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;padding:0}
+.cell b{font-family:var(--f-jp);font-size:clamp(1.5rem,6vw,2.1rem);font-weight:500;line-height:1.1}
+.cell span{font-size:.75rem;color:var(--muted)}
+.cell.empty{border:0;background:transparent;cursor:default}
+.cell[data-l="1"],.cell[data-l="2"]{border-color:var(--kaki);background:var(--kaki-soft)}
+.cell[data-l="3"],.cell[data-l="4"]{border-color:var(--good);background:var(--good-soft)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);margin-top:10px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:1px solid var(--line)}
+
+/* drill */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 16px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:.85rem}
+.chip[aria-pressed="true"]{border-color:var(--ai);background:var(--ai-soft);color:var(--ai);font-weight:700}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px}
+.drill{text-align:center}
+.drill .big{font-family:var(--f-jp);font-size:clamp(4.5rem,22vw,7rem);line-height:1.1;margin:4px 0 8px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.opt{border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:14px;font-size:1.15rem;font-weight:700;cursor:pointer}
+.opt:hover{border-color:var(--ai)}
+.opt.ok{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+.opt.no{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.fb{min-height:1.6em;margin-top:12px;font-weight:500}
+.fb.ok{color:var(--good)} .fb.no{color:var(--bad)}
+.btn{border:0;background:var(--ai);color:var(--bg);border-radius:10px;padding:10px 18px;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line);font-weight:500}
+.say{border:1px solid var(--line);background:var(--bg);border-radius:999px;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none;color:var(--ai)}
+.say svg{width:18px;height:18px}
+.stats{display:flex;justify-content:center;gap:18px;color:var(--muted);font-size:.85rem;margin-top:14px}
+
+/* menu sample */
+.menu-board{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;font-family:var(--f-jp)}
+.menu-board h3{margin:0 0 10px;font-size:1.05rem;color:var(--kaki);font-weight:700}
+.mline{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px dashed var(--line);cursor:pointer;align-items:baseline}
+.mline:first-of-type{border-top:0}
+.mline .jp{font-size:1.15rem}
+.mline .yen{font-variant-numeric:tabular-nums;white-space:nowrap}
+.mline .tr{display:block;font-family:var(--f-ui);font-size:.82rem;color:var(--muted)}
+
+/* vocab */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.word{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:2px;cursor:pointer;text-align:left;min-width:0}
+.word .t{font-family:var(--f-jp);font-size:1.45rem;line-height:1.25}
+.word .r{font-size:.8rem;color:var(--muted)}
+.word .m{font-size:.88rem}
+.hideans .word .r,.hideans .word .m,.hideans .phrase .ro,.hideans .phrase .en,.hideans .mline .tr{visibility:hidden}
+.hideans .word.shown .r,.hideans .word.shown .m,.hideans .phrase.shown .ro,.hideans .phrase.shown .en,.hideans .mline.shown .tr{visibility:visible}
+
+/* phrases */
+.plist{display:flex;flex-direction:column;gap:8px}
+.phrase{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:center;cursor:pointer}
+.phrase .txt{min-width:0;flex:1}
+.phrase .jp{font-family:var(--f-jp);font-size:1.2rem;line-height:1.35}
+.phrase .ro{font-size:.82rem;color:var(--muted)}
+.phrase .en{font-size:.9rem}
+
+/* path */
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0}
+.step{display:grid;grid-template-columns:40px 1fr;gap:12px;padding-bottom:22px;position:relative}
+.step:not(:last-child)::before{content:"";position:absolute;left:19px;top:40px;bottom:0;width:2px;background:var(--line)}
+.step .n{width:40px;height:40px;border-radius:50%;border:2px solid var(--ai);color:var(--ai);display:flex;align-items:center;justify-content:center;font-weight:700;background:var(--bg)}
+.step.now .n{background:var(--ai);color:var(--bg)}
+.step h3{margin:6px 0 2px;font-size:1.05rem}
+.step .when{font-size:.8rem;color:var(--kaki);font-weight:700}
+.step p{margin:4px 0;max-width:62ch}
+.step ul{margin:6px 0 0;padding-left:18px}
+.tip{background:var(--ai-soft);border-radius:12px;padding:14px 16px;margin-top:8px}
+.tip p{margin:4px 0}
+footer{margin-top:36px;color:var(--muted);font-size:.8rem}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <h1>Nihongo Path<span>日本語の道</span></h1>
+    <p>Kana → menus → travel → fluency</p>
+  </header>
+  <nav class="tabs" aria-label="Sections">
+    <div class="seg" role="tablist">
+      <button role="tab" data-tab="kana">Kana<small>かな</small></button>
+      <button role="tab" data-tab="menu">Menus<small>メニュー</small></button>
+      <button role="tab" data-tab="phrases">Phrases<small>会話</small></button>
+      <button role="tab" data-tab="path">Path<small>道</small></button>
+    </div>
+  </nav>
+  <main id="view"></main>
+  <footer>Audio uses your device's Japanese voice. Progress is saved on this device. Works offline once installed.</footer>
+</div>
+
+<script>
+const SPK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+
+const ROWS=[
+ {id:'a',label:'Vowels',ro:['a','i','u','e','o'],h:'あいうえお',k:'アイウエオ'},
+ {id:'k',label:'K',ro:['ka','ki','ku','ke','ko'],h:'かきくけこ',k:'カキクケコ'},
+ {id:'s',label:'S',ro:['sa','shi','su','se','so'],h:'さしすせそ',k:'サシスセソ'},
+ {id:'t',label:'T',ro:['ta','chi','tsu','te','to'],h:'たちつてと',k:'タチツテト'},
+ {id:'n',label:'N',ro:['na','ni','nu','ne','no'],h:'なにぬねの',k:'ナニヌネノ'},
+ {id:'h',label:'H',ro:['ha','hi','fu','he','ho'],h:'はひふへほ',k:'ハヒフヘホ'},
+ {id:'m',label:'M',ro:['ma','mi','mu','me','mo'],h:'まみむめも',k:'マミムメモ'},
+ {id:'y',label:'Y',ro:['ya',null,'yu',null,'yo'],h:'や_ゆ_よ',k:'ヤ_ユ_ヨ'},
+ {id:'r',label:'R',ro:['ra','ri','ru','re','ro'],h:'らりるれろ',k:'ラリルレロ'},
+ {id:'w',label:'W',ro:['wa',null,null,null,'wo'],h:'わ___を',k:'ワ___ヲ'},
+ {id:'nn',label:'ん',ro:['n',null,null,null,null],h:'ん____',k:'ン____'},
+ {id:'g',label:'G',ro:['ga','gi','gu','ge','go'],h:'がぎぐげご',k:'ガギグゲゴ',dk:1},
+ {id:'z',label:'Z',ro:['za','ji','zu','ze','zo'],h:'ざじずぜぞ',k:'ザジズゼゾ',dk:1},
+ {id:'d',label:'D',ro:['da','ji','zu','de','do'],h:'だぢづでど',k:'ダヂヅデド',dk:1},
+ {id:'b',label:'B',ro:['ba','bi','bu','be','bo'],h:'ばびぶべぼ',k:'バビブベボ',dk:1},
+ {id:'p',label:'P',ro:['pa','pi','pu','pe','po'],h:'ぱぴぷぺぽ',k:'パピプペポ',dk:1},
+];
+
+const SAMPLE_MENU=[
+ ['本日のおすすめ','','Today\'s recommendation'],
+ ['焼き鳥丼','¥980','Grilled chicken skewer rice bowl'],
+ ['ラーメン（並）','¥900','Ramen, regular size'],
+ ['ラーメン（大盛り）','¥1,050','Ramen, large portion'],
+ ['刺身定食','¥1,400','Sashimi set meal'],
+ ['ビール','¥600','Beer'],
+ ['※ 価格は税込です','','* Prices include tax'],
+];
+
+const MENU=[
+ {title:'Katakana words',note:'Mostly loanwords from English, and a few from Portuguese. Once you know katakana, sound them out and you\'ll often recognize them.',items:[
+  ['ラーメン',null,'raamen','Ramen'],['カレー',null,'karee','Japanese curry'],['ハンバーグ',null,'hanbaagu','Hamburg steak (beef patty)'],
+  ['ステーキ',null,'suteeki','Steak'],['サラダ',null,'sarada','Salad'],['パン',null,'pan','Bread (from Portuguese pão)'],
+  ['カステラ',null,'kasutera','Castella sponge cake (from Portuguese)'],['ケーキ',null,'keeki','Cake'],['アイス',null,'aisu','Ice cream'],
+  ['コーヒー',null,'koohii','Coffee'],['ジュース',null,'juusu','Juice'],['ビール',null,'biiru','Beer'],['ワイン',null,'wain','Wine'],
+  ['ウーロン茶','ウーロンちゃ','uuroncha','Oolong tea']]},
+ {title:'Dishes',note:'Learn these by shape first. Readings come later with real kanji study.',items:[
+  ['寿司','すし','sushi','Sushi'],['刺身','さしみ','sashimi','Sliced raw fish'],['天ぷら','てんぷら','tenpura','Tempura'],
+  ['うどん',null,'udon','Thick wheat noodles'],['そば',null,'soba','Buckwheat noodles'],['焼き鳥','やきとり','yakitori','Grilled chicken skewers'],
+  ['丼','どん','don','Rice bowl with a topping'],['定食','ていしょく','teishoku','Set meal: main, rice, soup, sides'],['ご飯','ごはん','gohan','Cooked rice; also "a meal"']]},
+ {title:'Key ingredients',note:'Single kanji that show up inside dish names, like 牛丼 (beef bowl) or 豚カツ (pork cutlet).',items:[
+  ['牛','ぎゅう','gyuu','Beef'],['豚','ぶた','buta','Pork'],['鶏','とり','tori','Chicken'],['魚','さかな','sakana','Fish'],
+  ['卵','たまご','tamago','Egg'],['野菜','やさい','yasai','Vegetables'],['水','みず','mizu','Water'],['お茶','おちゃ','ocha','Green tea']]},
+ {title:'Prices and ordering',note:'The signs that decide what you pay and how you order.',items:[
+  ['円','えん','en','Yen (¥)'],['税込','ぜいこみ','zeikomi','Tax included'],['税抜','ぜいぬき','zeinuki','Before tax'],
+  ['並','なみ','nami','Regular size'],['大盛り','おおもり','oomori','Large portion'],['本日のおすすめ','ほんじつのおすすめ','honjitsu no osusume','Today\'s recommendation'],
+  ['飲み放題','のみほうだい','nomihoudai','All-you-can-drink'],['食券','しょっけん','shokken','Meal ticket (buy at the machine first)'],['お会計','おかいけい','okaikei','The bill']]},
+];
+
+const PHRASES=[
+ {title:'Essentials',items:[
+  ['すみません','sumimasen','Excuse me / Sorry (also to get a server\'s attention)'],
+  ['ありがとうございます','arigatou gozaimasu','Thank you'],
+  ['はい / いいえ','hai / iie','Yes / No'],
+  ['わかりません','wakarimasen','I don\'t understand'],
+  ['もう一度お願いします','mou ichido onegaishimasu','Once more, please'],
+  ['ゆっくり話してください','yukkuri hanashite kudasai','Please speak slowly'],
+  ['大丈夫です','daijoubu desu','I\'m fine / No thanks']]},
+ {title:'At a restaurant',items:[
+  ['二人です','futari desu','Two people (at the entrance)'],
+  ['予約しています','yoyaku shite imasu','I have a reservation'],
+  ['英語のメニューはありますか','eigo no menyuu wa arimasu ka','Do you have an English menu?'],
+  ['おすすめは何ですか','osusume wa nan desu ka','What do you recommend?'],
+  ['これは何ですか','kore wa nan desu ka','What is this?'],
+  ['これをください','kore o kudasai','This one, please (while pointing)'],
+  ['ビールを二つお願いします','biiru o futatsu onegaishimasu','Two beers, please'],
+  ['いただきます','itadakimasu','Said before eating'],
+  ['おいしいです','oishii desu','It\'s delicious'],
+  ['ごちそうさまでした','gochisousama deshita','Said after eating, or to thank the staff when leaving'],
+  ['お会計をお願いします','okaikei o onegaishimasu','The check, please'],
+  ['カードで払えますか','kaado de haraemasu ka','Can I pay by card?']]},
+ {title:'Getting around',items:[
+  ['トイレはどこですか','toire wa doko desu ka','Where is the restroom?'],
+  ['駅はどこですか','eki wa doko desu ka','Where is the station?'],
+  ['いくらですか','ikura desu ka','How much is it?']]},
+ {title:'Counting things (for ordering)',items:[
+  ['ひとつ','hitotsu','One (item)'],['ふたつ','futatsu','Two'],['みっつ','mittsu','Three'],['よっつ','yottsu','Four']]},
+];
+
+const STEPS=[
+ {when:'Weeks 1–3',title:'Read all kana',body:'Learn the 46 basic hiragana, then katakana, then the dakuten forms (が, ぱ…). Use the Kana tab daily: 10 minutes of drill beats an hour once a week.',res:[['Tofugu\'s hiragana guide (mnemonics)','https://www.tofugu.com/japanese/learn-hiragana/']]},
+ {when:'Weeks 3–6',title:'Read menus and signs',body:'Use the Menus tab. Katakana loanwords become readable right away; learn about 20 food and price kanji by shape. Add the travel phrases now too.'},
+ {when:'Months 2–6',title:'Build the grammar foundation',body:'Work through one structured course from the start. This is the backbone for long-term fluency; aim for JLPT N5 level.',res:[['Genki I and II (textbooks), or Tae Kim\'s free guide','https://guidetojapanese.org/learn/'],['Bunpro: spaced repetition for grammar','https://bunpro.jp']]},
+ {when:'Month 2 onward',title:'Start a kanji and vocabulary system',body:'Pick one spaced-repetition system and keep it daily. Plan on roughly two years to reach the ~2,000 common kanji.',res:[['WaniKani (structured kanji + vocab)','https://www.wanikani.com'],['Anki (free, build or import decks)','https://apps.ankiweb.net']]},
+ {when:'Month 3 onward',title:'Speak and listen every week',body:'A weekly session with a tutor, plus shadowing (repeating audio out loud) on your commute. Your Spanish vowels already match Japanese ones closely.'},
+ {when:'Years 1–2',title:'Intermediate: N4 to N3',body:'Move to graded readers and simplified news, keep the SRS going, and start real conversations on trips.',res:[['NHK News Web Easy','https://www3.nhk.or.jp/news/easy/'],['JLPT official site','https://www.jlpt.jp/e/']]},
+ {when:'Year 2 onward',title:'Toward fluency: N2 and beyond',body:'Native content (shows, novels, podcasts) becomes your main material. Study shifts from courses to immersion.'},
+];
+
+const KEY='nihongoPath.v1';
+let S={tab:'kana',script:'h',kmode:'chart',rows:['a','k'],levels:{},hide:false};
+try{const raw=localStorage.getItem(KEY); if(raw) S=Object.assign(S,JSON.parse(raw));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+
+let jaVoice=null;
+function loadVoices(){try{const v=speechSynthesis.getVoices();jaVoice=v.find(x=>/^ja/i.test(x.lang))||null;}catch(e){}}
+try{loadVoices(); speechSynthesis.onvoiceschanged=loadVoices;}catch(e){}
+function say(t){try{if(!('speechSynthesis' in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';if(jaVoice)u.voice=jaVoice;u.rate=.85;speechSynthesis.speak(u);}catch(e){}}
+
+function chars(r,script){return [...(script==='h'?r.h:r.k)];}
+function itemsFor(script,rowIds){const out=[];ROWS.forEach(r=>{if(rowIds&&!rowIds.includes(r.id))return;const c=chars(r,script);r.ro.forEach((ro,i)=>{if(ro)out.push({key:script+':'+c[i],ch:c[i],ro});});});return out;}
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+/* drill state */
+let D={cur:null,opts:[],answered:null,right:0,total:0,streak:0};
+function pick(){const pool=itemsFor(S.script,S.rows);if(!pool.length)return null;
+  for(let tries=0;tries<20;tries++){let tot=0;const w=pool.map(it=>{const l=Math.min(S.levels[it.key]||0,4);const x=(5-l)**2;tot+=x;return x;});
+    let r=Math.random()*tot,i=0;for(;i<pool.length-1;i++){r-=w[i];if(r<=0)break;}
+    const it=pool[i];if(!(D.cur&&it.key===D.cur.key&&pool.length>1))return it;}
+  return pool[0];}
+function nextQ(){const it=pick();D.cur=it;D.answered=null;if(!it){D.opts=[];return;}
+  const poolRo=[...new Set(itemsFor(S.script,S.rows).map(x=>x.ro))].filter(r=>r!==it.ro);
+  const allRo=[...new Set(itemsFor(S.script).map(x=>x.ro))].filter(r=>r!==it.ro&&!poolRo.includes(r));
+  const d=shuffle(poolRo).slice(0,3);while(d.length<3&&allRo.length)d.push(allRo.splice(Math.floor(Math.random()*allRo.length),1)[0]);
+  D.opts=shuffle([it.ro,...d]);}
+
+function mastered(script){const all=itemsFor(script);return [all.filter(i=>(S.levels[i.key]||0)>=3).length,all.length];}
+
+function renderKana(){
+  const [m,t]=mastered(S.script);
+  let h=`<div class="row between">
+    <div class="row" role="group" aria-label="Script">
+      <button class="pill" data-act="script" data-v="h" aria-pressed="${S.script==='h'}">ひらがな Hiragana</button>
+      <button class="pill" data-act="script" data-v="k" aria-pressed="${S.script==='k'}">カタカナ Katakana</button>
+    </div>
+    <div class="row" role="group" aria-label="Mode">
+      <button class="pill" data-act="kmode" data-v="chart" aria-pressed="${S.kmode==='chart'}">Chart</button>
+      <button class="pill" data-act="kmode" data-v="drill" aria-pressed="${S.kmode==='drill'}">Drill</button>
+    </div></div>
+  <div class="progress"><div class="row between"><span class="label">Mastered</span><span class="num">${m} / ${t}</span></div><div class="bar"><i style="width:${t?m/t*100:0}%"></i></div></div>`;
+  if(S.kmode==='chart'){
+    const sect=(title,rows)=>{let g=`<h2>${title}</h2><div class="chart">`;rows.forEach(r=>{const c=chars(r,S.script);r.ro.forEach((ro,i)=>{if(!ro){g+='<div class="cell empty" aria-hidden="true"></div>';return;}
+      const key=S.script+':'+c[i];g+=`<button class="cell" data-act="say" data-t="${c[i]}" data-l="${S.levels[key]||0}" aria-label="${c[i]} ${ro}"><b>${c[i]}</b><span>${ro}</span></button>`;});});return g+'</div>';};
+    h+=sect('Basic',ROWS.filter(r=>!r.dk));
+    h+=`<p class="note" style="margin-top:10px">Tap any character to hear it.</p>`;
+    h+=sect('Dakuten (voiced)',ROWS.filter(r=>r.dk));
+    h+=`<div class="legend"><span><i></i>New</span><span><i style="background:var(--kaki-soft);border-color:var(--kaki)"></i>Learning</span><span><i style="background:var(--good-soft);border-color:var(--good)"></i>Mastered (3 correct in a row)</span></div>`;
+  }else{
+    if(!D.cur||!D.cur.key.startsWith(S.script+':')||!S.rows.some(id=>itemsFor(S.script,[id]).some(i=>i.key===D.cur.key)))nextQ();
+    h+=`<h2>Practice rows</h2><p class="note">Start with two rows, add the next one when they turn green.</p><div class="chips">`;
+    ROWS.forEach(r=>{h+=`<button class="chip" data-act="row" data-v="${r.id}" aria-pressed="${S.rows.includes(r.id)}">${r.label==='ん'?'ん':r.label}<span style="font-family:var(--f-jp);margin-left:4px">${chars(r,S.script)[0]}</span></button>`;});
+    h+=`</div>`;
+    if(!D.cur){h+=`<div class="card drill"><p class="note" style="margin:0 auto">Pick at least one row above to start.</p></div>`;}
+    else{
+      h+=`<div class="card drill"><div class="row between"><span class="label">What sound is this?</span><button class="say" data-act="say" data-t="${D.cur.ch}" aria-label="Hear it">${SPK}</button></div>
+      <div class="big" lang="ja">${D.cur.ch}</div><div class="opts">`;
+      D.opts.forEach(o=>{let cls='';if(D.answered){if(o===D.cur.ro)cls='ok';else if(o===D.answered)cls='no';}
+        h+=`<button class="opt ${cls}" data-act="ans" data-v="${o}" ${D.answered?'disabled':''}>${o}</button>`;});
+      h+=`</div>`;
+      if(D.answered===null)h+=`<div class="fb"></div>`;
+      else if(D.answered===D.cur.ro)h+=`<div class="fb ok">Correct — ${D.cur.ch} is “${D.cur.ro}”.</div>`;
+      else h+=`<div class="fb no">${D.cur.ch} is “${D.cur.ro}”. It will come back soon.</div><button class="btn" data-act="next" style="margin-top:8px">Next</button>`;
+      h+=`<div class="stats num"><span>Session ${D.right}/${D.total}</span><span>Streak ${D.streak}</span></div></div>`;
+    }
+    h+=`<div class="row" style="margin-top:14px"><button class="btn ghost" data-act="reset" id="resetBtn">Reset ${S.script==='h'?'hiragana':'katakana'} progress</button></div>`;
+  }
+  return h;
+}
+
+function renderMenu(){
+  let h=`<div class="row between"><p class="note" style="margin:0">Tap a card to reveal it. Turn on quiz mode to test yourself.</p>
+   <button class="pill" data-act="hide" aria-pressed="${S.hide}">Quiz mode</button></div>
+   <h2>Read this menu</h2><p class="note">A typical small-restaurant board. Tap each line for the translation.</p><div class="menu-board" lang="ja"><h3>お品書き</h3>`;
+  SAMPLE_MENU.forEach(([jp,yen,tr])=>{h+=`<div class="mline" data-act="reveal" role="button" tabindex="0"><div><span class="jp">${esc(jp)}</span><span class="tr" lang="en">${esc(tr)}</span></div><span class="yen">${yen}</span></div>`;});
+  h+=`</div>`;
+  MENU.forEach(g=>{h+=`<h2>${g.title}</h2><p class="note">${esc(g.note)}</p><div class="grid">`;
+    g.items.forEach(([t,rd,ro,m])=>{h+=`<button class="word" data-act="reveal" data-say="${esc(rd||t)}"><span class="t" lang="ja">${esc(t)}</span><span class="r">${rd?esc(rd)+' · ':''}${esc(ro)}</span><span class="m">${esc(m)}</span></button>`;});
+    h+=`</div>`;});
+  return h;
+}
+
+function renderPhrases(){
+  let h=`<div class="row between"><p class="note" style="margin:0">Tap the speaker to hear a phrase. Quiz mode hides the romaji and English.</p>
+   <button class="pill" data-act="hide" aria-pressed="${S.hide}">Quiz mode</button></div>`;
+  PHRASES.forEach(g=>{h+=`<h2>${g.title}</h2><div class="plist">`;
+    g.items.forEach(([jp,ro,en])=>{h+=`<div class="phrase" data-act="reveal"><div class="txt"><div class="jp" lang="ja">${esc(jp)}</div><div class="ro">${esc(ro)}</div><div class="en">${esc(en)}</div></div><button class="say" data-act="say" data-t="${esc(jp.replace(' / ','、'))}" aria-label="Hear it">${SPK}</button></div>`;});
+    h+=`</div>`;});
+  return h;
+}
+
+function renderPath(){
+  let h=`<p class="note">A foundation-first route: reading for travel comes fast, while grammar and kanji run underneath for the long term.</p><ol class="steps">`;
+  STEPS.forEach((s,i)=>{h+=`<li class="step ${i===0?'now':''}"><div class="n">${i+1}</div><div><div class="when">${s.when}</div><h3>${s.title}</h3><p>${s.body}</p>${s.res?'<ul>'+s.res.map(([t,u])=>`<li><a href="${u}" target="_blank" rel="noopener">${esc(t)}</a></li>`).join('')+'</ul>':''}</div></li>`;});
+  h+=`</ol><div class="tip"><span class="label">Your head start</span>
+   <p>Japanese has five vowels, a i u e o, pronounced almost exactly like Spanish ones. Read romaji the Spanish way and you'll be close.</p>
+   <p>Portuguese traders reached Japan in the 1500s, so a few words come from Portuguese: パン (pão), カステラ (Castela), ボタン (botão, button), タバコ (tabaco).</p></div>`;
+  return h;
+}
+
+function render(){
+  document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===S.tab));
+  const v=document.getElementById('view');
+  v.className=S.hide&&(S.tab==='menu'||S.tab==='phrases')?'hideans':'';
+  v.innerHTML=S.tab==='kana'?renderKana():S.tab==='menu'?renderMenu():S.tab==='phrases'?renderPhrases():renderPath();
+}
+
+let resetArmed=false,nextTimer=null;
+document.addEventListener('click',e=>{
+  const tab=e.target.closest('[data-tab]');if(tab){S.tab=tab.dataset.tab;save();render();window.scrollTo({top:0});return;}
+  const el=e.target.closest('[data-act]');if(!el)return;const a=el.dataset.act,v=el.dataset.v;
+  if(a==='say'){e.stopPropagation();say(el.dataset.t);return;}
+  if(a==='script'){S.script=v;D.cur=null;save();render();}
+  else if(a==='kmode'){S.kmode=v;save();render();}
+  else if(a==='row'){S.rows=S.rows.includes(v)?S.rows.filter(x=>x!==v):[...S.rows,v];D.cur=null;save();render();}
+  else if(a==='ans'&&D.cur&&D.answered===null){D.answered=v;D.total++;const k=D.cur.key;
+    if(v===D.cur.ro){D.right++;D.streak++;S.levels[k]=Math.min((S.levels[k]||0)+1,4);say(D.cur.ch);save();render();clearTimeout(nextTimer);nextTimer=setTimeout(()=>{nextQ();render();},800);}
+    else{D.streak=0;S.levels[k]=0;save();render();}}
+  else if(a==='next'){nextQ();render();}
+  else if(a==='hide'){S.hide=!S.hide;save();render();}
+  else if(a==='reveal'){el.classList.toggle('shown');if(el.dataset.say)say(el.dataset.say);}
+  else if(a==='reset'){if(!resetArmed){resetArmed=true;el.textContent='Tap again to erase progress';setTimeout(()=>{resetArmed=false;const b=document.getElementById('resetBtn');if(b)b.textContent=`Reset ${S.script==='h'?'hiragana':'katakana'} progress`;},3000);}
+    else{resetArmed=false;Object.keys(S.levels).forEach(k=>{if(k.startsWith(S.script+':'))delete S.levels[k];});D={cur:null,opts:[],answered:null,right:0,total:0,streak:0};save();render();}}
+});
+document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.mline')){e.preventDefault();e.target.classList.toggle('shown');}});
+render();
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
+</script>
+
+</body>
+</html>
